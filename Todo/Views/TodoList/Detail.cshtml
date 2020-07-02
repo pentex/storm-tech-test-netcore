@@ -5,6 +5,11 @@
 
 @{
     ViewData["Title"] = $"List: {Model.Title}";
+
+    // Note: This could also be done at the controller level or inside the TodoListDetailViewmodelFactory.Create() method.
+    // Doing it in the back-end would mean the sorting is done by the server rather than the client which would be more efficient and
+    // would also help separate concerns by avoiding cluttering up the UI layer with business logic.
+    var orderedItems = Model.Items.OrderBy(item => item.Importance).ToList();
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -19,7 +24,7 @@
             </a>
         </li>
 
-        @foreach (var item in Model.Items)
+        @foreach (var item in orderedItems)
         {
             string contextualClass;
             switch (item.Importance)
