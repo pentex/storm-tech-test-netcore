@@ -1,13 +1,10 @@
 ﻿@using Todo.Data
-@using Todo.Data.Entities
 @using Todo.Views.TodoItem
 @model Todo.Models.TodoItems.TodoItemEditFields
-
 
 @{
     ViewData["Title"] = $"Edit Item in {Model.TodoListTitle}";
 }
-
 
 @inject ApplicationDbContext dbContext
 
@@ -29,13 +26,12 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
-
             <div class="form-group">
                 <label asp-for="Importance"></label>
                 @Html.DropDownListFor(
                     m => m.Importance,
                     SelectListConvenience.ImportanceSelectListItems,
-                    new {@class="form-control"}
+                    new { @class = "form-control" }
                     )
                 <span asp-validation-for="Importance" class="text-danger"></span>
             </div>
@@ -46,13 +42,12 @@
                 </label>
             </div>
 
-
             <div class="form-group">
                 <label asp-for="ResponsiblePartyId"></label>
                 @Html.DropDownListFor(
                     m => m.ResponsiblePartyId,
                     dbContext.UserSelectListItems(),
-                    new {@class="form-control"}
+                    new { @class = "form-control" }
                     )
                 <span asp-validation-for="ResponsiblePartyId" class="text-danger"></span>
             </div>
