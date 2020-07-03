@@ -13,6 +13,8 @@ namespace Todo.Models.TodoItems
         [Display(Name = "Email Address")]
         public string ResponsiblePartyId { get; set; }
         public Importance Importance { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Rank can't be higher priority than 1")]
+        public int? Rank { get; set; }
 
         public TodoItemEditFields() { }
 
