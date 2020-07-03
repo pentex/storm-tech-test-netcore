@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Todo.Data;
 using Todo.Data.Entities;
 using Todo.EntityModelMappers.TodoItems;
@@ -67,7 +67,7 @@ namespace Todo.Controllers
 
         private RedirectToActionResult RedirectToListDetail(int fieldsTodoListId)
         {
-            return RedirectToAction("Detail", "TodoList", new {todoListId = fieldsTodoListId});
+            return RedirectToAction("Detail", "TodoList", new { todoListId = fieldsTodoListId });
         }
     }
 }
