@@ -22,3 +22,13 @@ $(() => {
         }
     });
 });
+
+function setNavigationDisplayName(profile) {
+    $("#nav-display-name-label").html(profile.entry[0].displayName);
+}
+
+function setDisplayNameCurried(itemNumber) {
+    return (profile) => {
+        $(`#display-name-label-${itemNumber}`).html(profile.entry[0].displayName);
+    }
+}
