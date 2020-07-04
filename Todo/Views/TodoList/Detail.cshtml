@@ -5,19 +5,26 @@
 
 @{
     ViewData["Title"] = $"List: {Model.Title}";
-
-    // Note: This could also be done at the controller level or inside the TodoListDetailViewmodelFactory.Create() method.
-    // Doing it in the back-end would mean the sorting is done by the server rather than the client which would be more efficient and
-    // would also help separate concerns by avoiding cluttering up the UI layer with business logic.
-    var orderedItems = Model.Items.OrderBy(item => item.Importance).ToList();
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <div class="col-md-6">
 
-    @Html.CheckBox("hide-completed-items-checkbox")
+    <div>
+        @Html.HiddenFor(m => m.TodoListId)
+        @Html.Label("order-by-dropdown", "Order by: ")
+        @Html.DropDownList(
+            "order-by-dropdown",
+            new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Importance", Value = "Importance", Selected = !Model.OrderByRank },
+                new SelectListItem { Text = "Rank", Value = "Rank", Selected = Model.OrderByRank }
+            })
+    </div>
+
     @Html.Label("hide-completed-items-checkbox", " Hide completed items")
+    @Html.CheckBox("hide-completed-items-checkbox")
 
     <ul class="list-group">
 
@@ -27,7 +34,7 @@
             </a>
         </li>
 
-        @foreach (var item in orderedItems)
+        @foreach (var item in Model.Items)
         {
             string contextualClass;
             switch (item.Importance)

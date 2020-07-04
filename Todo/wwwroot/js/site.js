@@ -10,4 +10,15 @@ $(() => {
             $(".is-done").show();
         }
     });
+
+    $("#order-by-dropdown").change(function () {
+        var selectedOption = $(this).children("option:selected").val();
+
+        if (selectedOption === "Importance") {
+            location.href = `/TodoList/Detail?todoListId=${$("#TodoListId").val()}&orderByRank=false`;
+        }
+        else if (selectedOption === "Rank") {
+            location.href = `/TodoList/Detail?todoListId=${$("#TodoListId").val()}&orderByRank=true`;
+        }
+    });
 });
