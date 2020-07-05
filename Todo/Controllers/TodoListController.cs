@@ -1,11 +1,12 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+using System.Threading.Tasks;
 using Todo.Data;
 using Todo.Data.Entities;
 using Todo.EntityModelMappers.TodoLists;
+using Todo.Models.TodoItems;
 using Todo.Models.TodoLists;
 using Todo.Services;
 
@@ -57,7 +58,31 @@ namespace Todo.Controllers
             await dbContext.AddAsync(todoList);
             await dbContext.SaveChangesAsync();
 
-            return RedirectToAction("Create", "TodoItem", new {todoList.TodoListId});
+            return RedirectToAction("Create", "TodoItem", new { todoList.TodoListId });
+        }
+
+        [HttpPost]
+        [Route("[controller]/{todoListId}")]
+        public async Task<IActionResult> UpdateItemRanks(int todoListId, [FromBody] UpdateItemRanksModel updateItemRanksModel)
+        {
+            var todoList = dbContext.SingleTodoList(todoListId);
+
+            foreach (var item in todoList.Items)
+            {
+                foreach (var itemIdRankPair in updateItemRanksModel.NewItemRanks)
+                {
+                    if (item.TodoItemId == itemIdRankPair.Id)
+                    {
+                        item.Rank = itemIdRankPair.Rank;
+                        break;
+                    }
+                }
+            }
+
+            dbContext.Update(todoList);
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

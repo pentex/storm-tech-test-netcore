@@ -27,7 +27,7 @@
     @Html.Label("hide-completed-items-checkbox", " Hide completed items")
     @Html.CheckBox("hide-completed-items-checkbox")
 
-    <ul class="list-group">
+    <ul id="todo-list" class="list-group">
 
         <li class="list-group-item">
             <a asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId">
@@ -56,6 +56,8 @@
             string itemIsDoneClass = item.IsDone ? "is-done" : string.Empty;
 
             <li class="list-group-item @contextualClass @itemIsDoneClass">
+
+                @Html.Hidden($"item-id-{item.TodoItemId}", item.TodoItemId)
 
                 <div class="row">
                     <div class="col-md-8">
@@ -96,3 +98,28 @@
         }
     </ul>
 </div>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    var orderByRank = "@Model.OrderByRank".toLowerCase() === "true";
+    if (orderByRank) {
+        $("#todo-list").sortable({
+            update: function () {
+                var rank = 1;
+                var newItemRanks = [];
+                $('[id^="item-id"]').each(function () {
+                    newItemRanks.push({ id: $(this).val(), rank });
+                    rank++;
+                });
+
+                $.ajax({
+                    url: '/TodoList/@Model.TodoListId',
+                    method: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ newItemRanks })
+                })
+            }
+        });
+    }
+</script>
