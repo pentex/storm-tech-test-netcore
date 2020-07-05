@@ -5,6 +5,7 @@
 
 @{
     ViewData["Title"] = $"List: {Model.Title}";
+    var itemNumber = 0;
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -34,10 +35,6 @@
             </a>
         </li>
 
-        @{
-            var itemNumber = 0;
-        }
-
         @foreach (var item in Model.Items)
         {
             itemNumber++;
@@ -58,44 +55,44 @@
 
             string itemIsDoneClass = item.IsDone ? "is-done" : string.Empty;
 
-        <li class="list-group-item @contextualClass @itemIsDoneClass">
+            <li class="list-group-item @contextualClass @itemIsDoneClass">
 
-            <div class="row">
-                <div class="col-md-8">
-                    <a asp-action="Edit" asp-controller="TodoItem" asp-route-todoItemId="@item.TodoItemId">
-                        @if (item.IsDone)
-                        {
-                        <s>@item.Title</s>
-                        }
-                        else
-                        {
-                        <text>@item.Title</text>
-                        }
-                    </a>
-                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <a asp-action="Edit" asp-controller="TodoItem" asp-route-todoItemId="@item.TodoItemId">
+                            @if (item.IsDone)
+                            {
+                                <s>@item.Title</s>
+                            }
+                            else
+                            {
+                                <text>@item.Title</text>
+                            }
+                        </a>
+                    </div>
 
-                <div class="col-md-4 text-right">
-                    @{
-                        var gravatarHash = Gravatar.GetHash(item.ResponsibleParty.Email);
-                        var gravatarJsonEndpoint = $"{gravatarHash}.json";
-                    }
-                    <small>
-                        @*
-                            The label has empty text by default and the script to get the display name from the profile uses a callback so
-                            if the Gravatar API call is slow then the label will just appear invisible until the callback is called
-                        *@
-                        <Label id="display-name-label-@itemNumber"></Label>
-                        @item.ResponsibleParty.UserName
-                        <img src="https://www.gravatar.com/avatar/@gravatarHash?s=30" />
-                    </small>
-                    <script type="text/javascript">
+                    <div class="col-md-4 text-right">
+                        @{
+                            var gravatarHash = Gravatar.GetHash(item.ResponsibleParty.Email);
+                            var gravatarJsonEndpoint = $"{gravatarHash}.json";
+                        }
+                        <small>
+                            @*
+                                The label has empty text by default and the script to get the display name from the profile uses a callback so
+                                if the Gravatar API call is slow then the label will just appear invisible until the callback is called
+                            *@
+                            <Label id="display-name-label-@itemNumber"></Label>
+                            @item.ResponsibleParty.UserName
+                            <img src="https://www.gravatar.com/avatar/@gravatarHash?s=30" />
+                        </small>
+                        <script type="text/javascript">
                         var setDisplayName = setDisplayNameCurried(@itemNumber);
-                    </script>
-                    <script src="https://www.gravatar.com/@gravatarJsonEndpoint?callback=setDisplayName" type="text/javascript"></script>
+                        </script>
+                        <script src="https://www.gravatar.com/@gravatarJsonEndpoint?callback=setDisplayName" type="text/javascript"></script>
+                    </div>
                 </div>
-            </div>
 
-        </li>
+            </li>
         }
     </ul>
 </div>
