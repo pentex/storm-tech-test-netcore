@@ -1,0 +1,62 @@
+﻿@using Todo.Data.Entities
+@using Todo.Services
+@model Todo.Models.TodoItems.TodoItemSummaryViewmodel
+
+@{
+    string contextualClass;
+    switch (Model.Importance)
+    {
+        case Importance.High:
+            contextualClass = "list-group-item-danger";
+            break;
+        case Importance.Low:
+            contextualClass = "list-group-item-info";
+            break;
+        default:
+            contextualClass = string.Empty;
+            break;
+    }
+
+    string itemIsDoneClass = Model.IsDone ? "is-done" : string.Empty;
+}
+
+<li class="list-group-item @contextualClass @itemIsDoneClass">
+
+    @Html.Hidden($"item-id-{Model.TodoItemId}", Model.TodoItemId)
+
+    <div class="row">
+        <div class="col-md-8">
+            <a asp-action="Edit" asp-controller="TodoItem" asp-route-todoItemId="@Model.TodoItemId">
+                @if (Model.IsDone)
+                {
+                    <s>@Model.Title</s>
+                }
+                else
+                {
+                    <text>@Model.Title</text>
+                }
+            </a>
+        </div>
+
+        <div class="col-md-4 text-right">
+            @{
+                var gravatarHash = Gravatar.GetHash(Model.ResponsibleParty.Email);
+                var gravatarJsonEndpoint = $"{gravatarHash}.json";
+            }
+            <small>
+                @*
+                    The label has empty text by default and the script to get the display name from the profile uses a callback so
+                    if the Gravatar API call is slow then the label will just appear invisible until the callback is called
+                *@
+                <Label id="display-name-label-@Model.TodoItemId"></Label>
+                @Model.ResponsibleParty.UserName
+                <img src="https://www.gravatar.com/avatar/@gravatarHash?s=30" />
+            </small>
+            <script type="text/javascript">
+                var setDisplayName = setDisplayNameCurried(@Model.TodoItemId);
+            </script>
+            <script src="https://www.gravatar.com/@gravatarJsonEndpoint?callback=setDisplayName" type="text/javascript"></script>
+        </div>
+    </div>
+
+</li>
